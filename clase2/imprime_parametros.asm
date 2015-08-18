@@ -6,6 +6,7 @@ imprime_parametros:
   push rbp
   mov rbp, rsp
 
+  mov rax, 1
   mov rdx, rsi
   mov rsi, rdi
   mov rdi, format

@@ -1,4 +1,6 @@
 global dadd
+
+section .text
 dadd:
   push rbp
   mov rbp, rsp

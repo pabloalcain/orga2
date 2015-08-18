@@ -1,4 +1,6 @@
 global iadd
+
+section .text
 iadd:
   push rbp
   mov rbp, rsp
