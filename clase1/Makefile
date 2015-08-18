@@ -1,5 +1,5 @@
 AS=nasm
-ASFLAGS=-f elf64 -g
+ASFLAGS=-f elf64 -g -Wall
 LDFLAGS=
 
 SRC=$(wildcard *.asm)
