@@ -5,7 +5,10 @@ LDFLAGS=
 CC=gcc
 CFLAGS=-O0 -g -Wall
 
-default: add_integers.e add_doubles.e
+default: add_integers.e add_doubles.e imprimir.e
+
+imprimir.e: imprimir_c.o parametros_a.o
+	gcc $(LDFLAGS) $^ -o $@
 	
 add_doubles.e: add_doubles_c.o dadd_a.o
 	gcc $(LDFLAGS) $^ -o $@
