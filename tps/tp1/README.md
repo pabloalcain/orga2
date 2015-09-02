@@ -8,3 +8,5 @@ para ver una oración como una linked list de palabras. Para compilar,
 correr `make` y para ejecutar los tests, `./prueba.sh`.
 
 prueba.sh es un pequeño script que compila y corre tests con bash.
+
+No entiendo cómo tiene que funcionar el oracionImprimir. Estará mal el testcase?
