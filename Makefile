@@ -1,4 +1,4 @@
-SUBDIRS := $(wildcard clase*/.)
+SUBDIRS := $(wildcard clase*/.) $(wildcard tp*/.)
 SUBCLEAN := $(addsuffix .clean,$(SUBDIRS))
 
 .PHONY: default clean $(SUBDIRS) $(SUBCLEAN)

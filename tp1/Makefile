@@ -5,6 +5,8 @@ TESTOBJS=tester.o
 NASM=nasm
 NASMFLAGS=-f elf64 -g -F DWARF
 
+default: main
+
 main: $(OBJS)
 
 tester: $(TESTOBJS) $(OBJS)
