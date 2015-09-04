@@ -63,6 +63,9 @@ int main (void){
   insertarOrdenado( miLista, palabraCopiar( "f" ), palabraMenor);
   printf("SIN FILTRO:\n");
   oracionImprimir( miLista, "/dev/stdout", palabraImprimir);
+  printf("MENSAJE DIABLOICO:\n");
+  descifrarMensajeDiabolico( miLista, "/dev/stdout", palabraImprimir);
+
   filtrarPalabra( miLista, palabraMenor, "e" );
   printf("PRIMER FILTRO:\n");
   oracionImprimir( miLista, "/dev/stdout", palabraImprimir);

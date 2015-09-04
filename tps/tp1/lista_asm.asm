@@ -222,11 +222,11 @@ section .text
 		mov rbp, rsp
 		push r12
 		push r13
-	
+		push r14
 		mov r12, [rdi + OFFSET_PRIMERO]
 		mov rdi, rsi
+		mov r14, rdx
 		mov rsi, file_mode ; esto no puede evitarse? es feito
-
 		call fopen
 		mov r13, rax
 		cmp r12, 0x0
@@ -236,7 +236,8 @@ section .text
 			je .exit
 			mov rdi, [r12 + OFFSET_PALABRA]
  			mov rsi, r13
-			call palabraImprimir
+			
+			call r14
 			mov r12, [r12 + OFFSET_SIGUIENTE]
 			jmp .loop
 		.empty:
@@ -246,6 +247,7 @@ section .text
 		.exit:
 			mov rdi, r13
 			call fclose
+			pop r14
 			pop r13
 			pop r12
 			pop rbp
@@ -371,8 +373,58 @@ section .text
 			pop rbx
 			pop rbp
 			ret
-		; COMPLETAR AQUI EL CODIGO
 
 	; void descifrarMensajeDiabolico( lista *l, char *archivo, void (*funcImpPbr)(char*,FILE* ) );
+	;;                              (   RDI   ,      RSI     ,             RDX                  );
 	descifrarMensajeDiabolico:
+		push rbp
+		mov rbp, rsp
+		push r12
+		push r13
+		push r14
+		push r15
+		mov r12, [rdi + OFFSET_PRIMERO]
+		mov rdi, rsi
+		mov r14, rdx
+		mov rsi, file_mode ; esto no puede evitarse? es feito
+		call fopen
+		mov r13, rax
+		cmp r12, 0x0
+		je .empty
+		xor r15, r15
+		.loop:
+			cmp r12, 0x0
+			je .print
+			mov rdi, [r12 + OFFSET_PALABRA]
+			push rdi
+			mov r12, [r12 + OFFSET_SIGUIENTE]
+			inc r15
+			jmp .loop
+
+		.empty:
+			mov rsi, r13
+			mov rdi, mensaje_vacio
+			call fputs
+			jmp .exit
+	
+		.print:
+			.loop1:
+				cmp r15, 0x0
+				je .exit
+				dec r15
+				pop rdi
+				mov rsi, r13
+				call r14
+				jmp .loop1
+			jmp .exit
+		.exit:
+			mov rdi, r13
+			call fclose
+			pop r15
+			pop r14
+			pop r13
+			pop r12
+			pop rbp
+			ret
+		
 		; COMPLETAR AQUI EL CODIGO
