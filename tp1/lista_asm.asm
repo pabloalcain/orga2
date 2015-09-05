@@ -31,14 +31,14 @@ extern fclose
 	
 ;; DEFINES
 %define NULL 		0
-%define TRUE 		0
-%define FALSE 		0
+%define TRUE 		1
+%define FALSE 	0
 
 %define LISTA_SIZE 	    	 8 ;un puntero
 %define OFFSET_PRIMERO 		 0 ;el único elemento
 	
 %define NODO_SIZE     		 16 ; dos punteros
-%define OFFSET_SIGUIENTE   	 0  ; el primer elemento (tamaño: 8)
+%define OFFSET_SIGUIENTE 	 0  ; el primer elemento (tamaño: 8)
 %define OFFSET_PALABRA 		 8  ; el segundo elemento (tamaño: 8)
 
 
@@ -53,9 +53,6 @@ section .data
 section .text
 	
 	
-;;/** FUNCIONES DE PALABRAS **/
-;;-----------------------------------------------------------
-	
 ;; unsigned char palabraLongitud( char *p );
 ;;      RAX      palabraLongitud(   RDI   );
 palabraLongitud:
@@ -64,7 +61,7 @@ palabraLongitud:
 	  mov cl, [rdi]
 	  inc rdi
 	  inc rax
-	  cmp cl, 0x0
+	  cmp cl, 0
 	  jne .loop
 	dec rax
 	ret
@@ -76,7 +73,7 @@ palabraMenor:
 	  mov cl, [rdi]
 	  mov dl, [rsi]
     ;; si hasta aquí son los dos iguales y dl es 0, entonces cl nunca es menor
-	  cmp dl, 0x0
+	  cmp dl, 0
 	  je .false
 	  inc rdi
 	  inc rsi
@@ -85,10 +82,10 @@ palabraMenor:
 	  jl .true
 	  jg .false
 .true:
- 	mov rax, 1
+ 	mov rax, TRUE
   ret
 .false:
-  mov rax, 0
+  mov rax, FALSE
   ret
 
 ;; void palabraFormatear( char *p, void (*funcModificarString)(char*) );
@@ -129,7 +126,7 @@ palabraCopiar:
 	call malloc
 	mov rcx, r13
 	mov r13, rax	; pCop tiene que devolver el rax de malloc: no lo toco
-  .loop:
+  .loop:				; while rcx != 0
   	cmp rcx, 0
   	je .break
   	dec rcx
