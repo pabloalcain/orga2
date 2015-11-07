@@ -20,7 +20,7 @@ typedef struct str_gdt_descriptor {
 typedef struct str_gdt_entry {
     unsigned short  limit_0_15;
     unsigned short  base_0_15;
-    unsigned char   base_23_16;
+    unsigned char   base_16_23;
     unsigned char   type:4;
     unsigned char   s:1;
     unsigned char   dpl:2;
@@ -30,7 +30,7 @@ typedef struct str_gdt_entry {
     unsigned char   l:1;
     unsigned char   db:1;
     unsigned char   g:1;
-    unsigned char   base_31_24;
+    unsigned char   base_24_31;
 } __attribute__((__packed__, aligned (8))) gdt_entry;
 
 /* Tabla GDT */

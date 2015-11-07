@@ -31,6 +31,22 @@ gdt_entry gdt[GDT_COUNT] = {
         (unsigned char)     0x00,           /* g            */
         (unsigned char)     0x00,           /* base[31:24]  */
     },
+    [GDT_IDX_KERN_DATA] = (gdt_entry) {
+      limit_0_15 = 0xC7F;
+      limit_16_19 = 0;
+      base_0_15 = 0;
+      base_16_31 = 0;
+      
+    },
+    [GDT_IDX_KERN_CODE] = (gdt_entry) {
+
+    },
+    [GDT_IDX_USER_DATA] = (gdt_entry) {
+
+    },
+    [GDT_IDX_USER_CODE] = (gdt_entry) {
+
+    },
 
 
 };
