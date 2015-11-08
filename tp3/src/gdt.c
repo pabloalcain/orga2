@@ -31,21 +31,65 @@ gdt_entry gdt[GDT_COUNT] = {
         (unsigned char)     0x00,           /* g            */
         (unsigned char)     0x00,           /* base[31:24]  */
     },
-    [GDT_IDX_KERN_DATA] = (gdt_entry) {
-      limit_0_15 = 0xC7F;
-      limit_16_19 = 0;
-      base_0_15 = 0;
-      base_16_31 = 0;
-      
-    },
     [GDT_IDX_KERN_CODE] = (gdt_entry) {
-
+      .limit_0_15 = 0xC7F,
+      .limit_16_19 = 0,
+      .base_0_15 = 0x0,
+      .base_16_23 = 0x0,
+      .base_24_31 = 0x0,
+      .type = 0xA,
+      .s = 1,
+      .dpl = 0,
+      .p = 1,
+      .avl = 1,
+      .l = 0,
+      .db = 1,
+      .g = 1,
     },
-    [GDT_IDX_USER_DATA] = (gdt_entry) {
-
+    [GDT_IDX_KERN_DATA] = (gdt_entry) {
+      .limit_0_15 = 0xC7F,
+      .limit_16_19 = 0x0,
+      .base_0_15 = 0x0,
+      .base_16_23 = 0x7D,
+      .base_24_31 = 0x0,
+      .type = 0x2,
+      .s = 0x1,
+      .dpl = 0x0,
+      .p = 0x1,
+      .avl = 0x1,
+      .l = 0x0,
+      .db = 0x1,
+      .g = 0x1,
     },
     [GDT_IDX_USER_CODE] = (gdt_entry) {
-
+      .limit_0_15 = 0xC7F,
+      .limit_16_19 = 0x0,
+      .base_0_15 = 0x0,
+      .base_16_23 = 0xFA,
+      .base_24_31 = 0x0,
+      .type = 0xA,
+      .s = 0x1,
+      .dpl = 0x0,
+      .p = 0x1,
+      .avl = 0x1,
+      .l = 0x0,
+      .db = 0x1,
+      .g = 0x1,
+    },
+    [GDT_IDX_USER_DATA] = (gdt_entry) {
+      .limit_0_15 = 0xC7F,
+      .limit_16_19 = 0,
+      .base_0_15 = 0,
+      .base_16_23 = 0x77,
+      .base_24_31 = 0x1,
+      .type = 0x2,
+      .s = 0x1,
+      .dpl = 0x0,
+      .p = 0x1,
+      .avl = 0x1,
+      .l = 0x0,
+      .db = 0x1,
+      .g = 0x1,
     },
 
 

@@ -10,8 +10,7 @@ segmentos: 500 MB / 4 = 125 MB = 125 * 2^20 b = 125 * 16^5 =
 
 1. KERN_DATA = 0x0
 2. KERN_CODE = 0x07D0000
-3. USER_DATA = 0x0FA0000
-4. USER_CODE = 0x1770000
+3. USER_DATA = 0x0FA00004. USER_CODE = 0x1770000
 
 
 Los últimos 4 números son Base 0:15, los siguientes 2 son Base 16:23 y
