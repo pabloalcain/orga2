@@ -1,6 +1,6 @@
 # Paso a paso de los ejercicios del TP3
 
-## Ejercicio 1
+## Ejercicio 1: GDT
 
 Para llenar la GDT hay que hacer dos cuentas: primero que nada, los
 500 MB = 512000 KB los partimos de forma pareja entre los cuatro
@@ -38,3 +38,14 @@ Los que son iguales para todos:
 - Ac = 0
 - Gr = 0
 - Sz = 1
+
+Finalmente, tenemos que agregar el área de video (en el índice 0xC)
+como parte de la GDT. El área de video comienza en 0xB8000 y es de
+80x50. Si ahora movemos el segmento a 0xC podemos imprimir un texto y
+además limpiar la pantalla. Usando fs como base, la rutina de limpiar
+pantalla es simplemente recorrer los 80x50=4000 píxeles y pintarlos de
+negro (NOTA: cada píxel tiene 2 bytes: el primero para el caracter
+ASCII, el segundo para el modo). http://wiki.osdev.org/Text_UI muestra
+bien cómo quedan los colorcitos =)
+
+## Ejercicio 2: IDT

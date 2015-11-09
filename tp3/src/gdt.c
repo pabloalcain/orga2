@@ -91,8 +91,21 @@ gdt_entry gdt[GDT_COUNT] = {
       .db = 0x1,
       .g = 0x1,
     },
-
-
+    [GDT_IDX_VIDEO] = (gdt_entry) {
+      .limit_0_15 = 0x8000,
+      .limit_16_19 = 0x1,
+      .base_0_15 = 0x8000,
+      .base_16_23 = 0x0B,
+      .base_24_31 = 0x0,
+      .type = 0x2,
+      .s = 0x1,
+      .dpl = 0x0,
+      .p = 0x1,
+      .avl = 0x1,
+      .l = 0x0,
+      .db = 0x1,
+      .g = 0x0,
+    },
 };
 
 gdt_descriptor GDT_DESC = {

@@ -34,7 +34,7 @@ idt_descriptor IDT_DESC = {
     }
 */
 
-/*
+
 // descomentar para usar, seteando segsel y attr segun corresponda
 
 #define IDT_ENTRY(numero, dpl)                                                                                   \
@@ -42,11 +42,12 @@ idt_descriptor IDT_DESC = {
     idt[numero].segsel = (unsigned short) 0x00;                                                                  \
     idt[numero].attr = (unsigned short) 0x0000 | (((unsigned short)(dpl & 0x3)) << 13);                          \
     idt[numero].offset_16_31 = (unsigned short) ((unsigned int)(&_isr ## numero) >> 16 & (unsigned int) 0xFFFF);
-*/
+
 
 
 void idt_inicializar() {
     // Excepciones
-
+  int _isr13 = 13;
+  IDT_ENTRY(13, 0);
 	// llamar a IDT_ENTRY una vez por cada entrada a configurar (es una macro que no soporta loops)
 }

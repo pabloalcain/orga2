@@ -1,5 +1,5 @@
 AS=nasm
-ASFLAGS=-f elf64 -g -Wall
+ASFLAGS=-f elf64 -g -Wall -F dwarf
 LDFLAGS=
 
 CC=gcc

@@ -5,7 +5,11 @@
 
 %include "imprimir.mac"
 extern GDT_DESC
+extern IDT_DESC
   
+extern game_inicializar
+extern screen_inicializar
+extern idt_inicializar
 global start
 
 
@@ -57,24 +61,37 @@ start:
 modoprotegido:
 BITS 32
   ; Establecer selectores de segmentos
-  xchg bx, bx
-  mov ax, (0x8*8)
+  mov ax, (0x9*8)
   mov ds, ax
   mov es, ax
   mov gs, ax
   mov ss, ax
-  mov fs, ax
+
   ; Establecer la base de la pila
   mov ebp, 0x27000
   mov esp, ebp
   ; Imprimir mensaje de bienvenida
-  imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 0, 0
+  mov ax, (0xC*8)
+  mov fs, ax
+  imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 2, 0
+
   ; Inicializar el juego
+  call game_inicializar
 
   ; Inicializar pantalla
+  xor ebx, ebx
+  limpiar_pantalla:
+    mov byte [fs:2*ebx], 'H'    ; caracter
+    mov byte [fs:2*ebx+1], 0x1F  ; modo
+    inc ebx
+    cmp ebx, 4000               ; 80x50 = 4000
+  jb limpiar_pantalla
 
-  ; Inicializar el manejador de memoria
+  xchg bx, bx
+  call screen_inicializar
 
+  ;Inicializar el manejador de memoria
+  
   ; Inicializar el directorio de paginas
 
   ; Cargar directorio de paginas
@@ -88,10 +105,14 @@ BITS 32
   ; Inicializar el scheduler
 
   ; Inicializar la IDT
+  call idt_inicializar
 
   ; Cargar IDT
+  lidt [IDT_DESC]
 
+;  xchg bx, bx
   ; Configurar controlador de interrupciones
+  mov byte [fs:0x08001], 0x0    ; caracter
 
   ; Cargar tarea inicial
 
