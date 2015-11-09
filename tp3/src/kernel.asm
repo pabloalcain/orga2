@@ -63,18 +63,22 @@ BITS 32
   ; Establecer selectores de segmentos
   mov ax, (0x9*8)
   mov ds, ax
+  mov ax, (0xB*8)
   mov es, ax
+  ;mov ax, (0xC*8)
   mov gs, ax
   mov ss, ax
+  
+  mov ax, (0xC*8)
+  mov fs, ax
 
   ; Establecer la base de la pila
   mov ebp, 0x27000
   mov esp, ebp
-  ; Imprimir mensaje de bienvenida
-  mov ax, (0xC*8)
-  mov fs, ax
-  imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 2, 0
 
+  ; Imprimir mensaje de bienvenida
+  imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 0, 0
+  xchg bx, bx
   ; Inicializar el juego
   call game_inicializar
 
@@ -110,6 +114,9 @@ BITS 32
   ; Cargar IDT
   lidt [IDT_DESC]
 
+  xor dx, dx
+  xor ax, ax
+  div ax
 ;  xchg bx, bx
   ; Configurar controlador de interrupciones
   mov byte [fs:0x08001], 0x0    ; caracter
