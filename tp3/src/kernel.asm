@@ -10,6 +10,8 @@ extern IDT_DESC
 extern game_inicializar
 extern screen_inicializar
 extern idt_inicializar
+
+extern mmu_inicializar_dir_kernel
 global start
 
 
@@ -93,18 +95,26 @@ BITS 32
   call screen_inicializar
 
   ; Inicializar el manejador de memoria
-  
-  ; Inicializar el directorio de paginas
 
+  ; Inicializar el directorio de paginas
+  xchg bx, bx
+  call mmu_inicializar_dir_kernel
+  
   ; Cargar directorio de paginas
+  mov cr3, ebp
 
   ; Habilitar paginacion
-
+  mov eax, cr0
+  or eax, 0x80000000
+  mov cr0, eax
+  
   ; Inicializar tss
 
   ; Inicializar tss de la tarea Idle
 
   ; Inicializar el scheduler
+
+  ; Configurar controlador de interrupciones
 
   ; Inicializar la IDT
   call idt_inicializar
@@ -112,7 +122,6 @@ BITS 32
   ; Cargar IDT
   lidt [IDT_DESC]
 
-  ; Configurar controlador de interrupciones
   ; Cargar tarea inicial
 
   ; Habilitar interrupciones

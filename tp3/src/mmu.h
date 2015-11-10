@@ -16,6 +16,8 @@
 #define MAPA_BASE_FISICA  0x500000
 #define MAPA_BASE_VIRTUAL 0x800000
 
+/* algunos que no tengo muy claros si son útiles */
+
 void mmu_inicializar();
 
 
@@ -44,7 +46,7 @@ uint mmu_inicializar_memoria_perro(perro_t *perro, int index_jugador, int index_
 void mmu_mover_perro(perro_t *perro, int viejo_x, int viejo_y);
 
 
-void mmu_mapear_pagina  (uint virtual, uint cr3, uint fisica, uint attrs);
+void mmu_mapear_pagina  (uint virtual, uint *cr3, uint fisica, uint attrs);
 uint mmu_unmapear_pagina(uint virtual, uint cr3);
 
 
