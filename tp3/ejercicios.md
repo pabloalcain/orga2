@@ -48,4 +48,21 @@ negro (NOTA: cada píxel tiene 2 bytes: el primero para el caracter
 ASCII, el segundo para el modo). http://wiki.osdev.org/Text_UI muestra
 bien cómo quedan los colorcitos =)
 
+### Idea: CREAR MACRO PARA GDT
+
 ## Ejercicio 2: IDT
+
+Hay una macro que funciona bien, a la que sólo hay que setearle el
+atributo (que tampoco sé cómo hacerlo) y el segmento (que tiene que
+ser el segmento de código del kernel). En esta macro espera el símbolo
+_idtn, declarado en asm, al que referencia con & para obtener la
+dirección. Por eso es importante definirla en asm. Es un poco oscuro,
+pero sigue la lógica original de la cátedra. Por cada entrada tenemos:
+
+- IDT_ENTRY(N, 0): En el código de C, `idt.c`
+- _isrN: void function, declarada en `idt.h`
+- _isrN: function definida en ASM a través de la macro ISR N
+
+Después es cuestión de crear todas las entradas de idt. Finalmente hay
+que tocar los handles en `isr.asm` para que quede escribiendo el
+código de interrupción.

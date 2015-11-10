@@ -78,7 +78,6 @@ BITS 32
 
   ; Imprimir mensaje de bienvenida
   imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 0, 0
-  xchg bx, bx
   ; Inicializar el juego
   call game_inicializar
 
@@ -91,10 +90,9 @@ BITS 32
     cmp ebx, 4000               ; 80x50 = 4000
   jb limpiar_pantalla
 
-  xchg bx, bx
   call screen_inicializar
 
-  ;Inicializar el manejador de memoria
+  ; Inicializar el manejador de memoria
   
   ; Inicializar el directorio de paginas
 
@@ -114,13 +112,7 @@ BITS 32
   ; Cargar IDT
   lidt [IDT_DESC]
 
-  xor dx, dx
-  xor ax, ax
-  div ax
-;  xchg bx, bx
   ; Configurar controlador de interrupciones
-  mov byte [fs:0x08001], 0x0    ; caracter
-
   ; Cargar tarea inicial
 
   ; Habilitar interrupciones
