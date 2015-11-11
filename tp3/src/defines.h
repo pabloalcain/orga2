@@ -47,5 +47,8 @@ typedef unsigned int   uint;
 /* Selectores de segmentos */
 /* -------------------------------------------------------------------------- */
 
-
+/* Paginacion */
+/* -------------------------------------------------------------------------- */
+#define PAGE_DIR       0x27000 /* direccion del page directory */
+#define PAGE_TABLE     0x28000 /* direccion de la primera tabla */
 #endif  /* !__DEFINES_H__ */

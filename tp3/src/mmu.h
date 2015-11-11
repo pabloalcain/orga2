@@ -12,12 +12,42 @@
 #include "game.h"
 
 #define CODIGO_BASE       0X401000
-
 #define MAPA_BASE_FISICA  0x500000
 #define MAPA_BASE_VIRTUAL 0x800000
 
 /* algunos que no tengo muy claros si son útiles */
+uint page_directory[1024];
+uint page_table[1024];
 
+typedef struct pte_t {
+  unsigned int  address:20;
+  unsigned char free:3;
+  unsigned char global:1;
+  unsigned char page_attr:1;
+  unsigned char dirty:1;
+  unsigned char accessed:1;
+  unsigned char cache_dis:1;
+  unsigned char write_thru:1;
+  unsigned char user_sup:1;
+  unsigned char read_write:1;
+  unsigned char present:1;
+} __attribute__((__packed__)) pte;
+
+typedef struct pde_t {
+  unsigned int  address:20;
+  unsigned char free:3;
+  unsigned char global:1;
+  unsigned char page_size:1;
+  unsigned char ignored:1;
+  unsigned char accessed:1;
+  unsigned char cache_dis:1;
+  unsigned char write_thru:1;
+  unsigned char user_sup:1;
+  unsigned char read_write:1;
+  unsigned char present:1;
+} __attribute__((__packed__)) pde;
+
+  
 void mmu_inicializar();
 
 
@@ -46,7 +76,7 @@ uint mmu_inicializar_memoria_perro(perro_t *perro, int index_jugador, int index_
 void mmu_mover_perro(perro_t *perro, int viejo_x, int viejo_y);
 
 
-void mmu_mapear_pagina  (uint virtual, uint *cr3, uint fisica, uint attrs);
+void mmu_mapear_pagina  (uint virtual, uint cr3, uint fisica, uint attrs);
 uint mmu_unmapear_pagina(uint virtual, uint cr3);
 
 

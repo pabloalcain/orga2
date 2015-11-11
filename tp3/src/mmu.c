@@ -10,28 +10,42 @@
 /* Atributos paginas */
 /* -------------------------------------------------------------------------- */
 
-void mmu_mapear_pagina(uint virtual, uint *cr3, uint fisica, uint attrs) {
+void mmu_mapear_pagina(uint virtual, uint cr3, uint fisica, uint attrs) {
   /* De los 32 bits de la direccion de memoria virtual, los 10 bits
      mas altos son la entrada en la el directorio de pagina, los
      siguientes 10 son la entrada en la tabla de paginas y los ultimos
      12 son la posicion dentro de la página de 4kb */
-  int pde = (virtual & 0xFFC00000) >> 22;
-  int pte = (virtual & 0x003FF000) >> 12;
+  pde *page_dir = (pde *) cr3;
+  int pdidx = (virtual & 0xFFC00000) >> 22;
+  int ptidx = (virtual & 0x003FF000) >> 12;
   //int off = virtual & 0x00000FFF;
-  int *idx_table = (int *) *(cr3 + pde);
-  int *idx_page = idx_table + pte*4;
-  *idx_page = fisica;
+  pte *page_table; 
+  page_table = (pte *)(uint) (page_dir[pdidx].address);
+  page_table[ptidx].address = fisica;
 }
 
 uint mmu_inicializar_dir_kernel() {
-  uint pagina[1024] __attribute__((aligned(4096)));
-  uint *cr3 = (uint *) rcr3();
+  pde *page_dir = (pde *) PAGE_DIR; //page_dir apunta al directorio definido
   int i;
   /* a cero todas las entradas del PD */
   for (i = 0; i < 1024; ++i) {
-    cr3[i] = 0x00000002;
+    page_dir[i].address = 0x0;
+    page_dir[i].free = 0x0;
+    page_dir[i].global = 0x0;
+    page_dir[i].page_size = 0x0;
+    page_dir[i].ignored = 0x0;
+    page_dir[i].accessed = 0x0;
+    page_dir[i].cache_dis = 0x0;
+    page_dir[i].write_thru = 0x0;
+    page_dir[i].user_sup = 0x0;
+    page_dir[i].read_write = 0x1;
+    page_dir[i].present = 0x0;
+    /* Corto: page_dir[i] = 0x00000002; // Address a 0, r/w
+     */
   }
-  cr3[0] = (uint) pagina | 3;
+  uint cr3 = (uint) page_dir;
+  page_dir[0].address = PAGE_TABLE >> 12; //first page
+  page_dir[0].present = 0x1;
   for (i = 0; i < 1024; ++i) {
     mmu_mapear_pagina(0x1000*i, cr3, 0x1000*i, 0x3);
   }

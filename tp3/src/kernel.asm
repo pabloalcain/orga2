@@ -21,6 +21,7 @@ global start
 ;;
 ;; Seccion de datos.
 ;; -------------------------------------------------------------------------- ;;
+  PAGE_DIR equ 0x27000
   iniciando_mr_msg db     'Iniciando kernel (Modo Real)...'
   iniciando_mr_len equ    $ - iniciando_mr_msg
 
@@ -94,15 +95,30 @@ BITS 32
 
   call screen_inicializar
 
+  ; Inicializar la IDT
+  call idt_inicializar
+
+  ; Cargar IDT
+  lidt [IDT_DESC]
+
+
+
+
   ; Inicializar el manejador de memoria
 
+
+  
   ; Inicializar el directorio de paginas
   xchg bx, bx
   call mmu_inicializar_dir_kernel
+  xchg bx, bx
   
-  ; Cargar directorio de paginas
-  mov cr3, ebp
 
+
+
+  ; Cargar directorio de paginas
+  mov eax, PAGE_DIR
+  mov cr3, eax
   ; Habilitar paginacion
   mov eax, cr0
   or eax, 0x80000000
