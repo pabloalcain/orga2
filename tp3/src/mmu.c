@@ -16,39 +16,41 @@ void mmu_mapear_pagina(uint virtual, uint cr3, uint fisica, uint attrs) {
      siguientes 10 son la entrada en la tabla de paginas y los ultimos
      12 son la posicion dentro de la página de 4kb */
   pde *page_dir = (pde *) cr3;
-  int pdidx = (virtual & 0xFFC00000) >> 22;
-  int ptidx = (virtual & 0x003FF000) >> 12;
-  //int off = virtual & 0x00000FFF;
-  pte *page_table; 
-  page_table = (pte *)(uint) (page_dir[pdidx].address);
-  page_table[ptidx].address = fisica;
+  uint *page_table; /* podemos hacerlo un puntero a pte, pero prefiero
+                       mantener la aridad de la funcion de la catedra */
+  int pdidx = (virtual >> 22) & 0x03FF; /* last 10 binary digits */
+  int ptidx = (virtual >> 12) & 0x03FF;
+  page_table = (uint *) (uint)(page_dir[pdidx].address << 12);
+  page_table[ptidx] = fisica | attrs;
 }
 
 uint mmu_inicializar_dir_kernel() {
-  pde *page_dir = (pde *) PAGE_DIR; //page_dir apunta al directorio definido
+  pde* page_directory = (pde*) PAGE_DIR;
+  //uint* page_directory = (uint*) PAGE_DIR;
+  
   int i;
-  /* a cero todas las entradas del PD */
-  for (i = 0; i < 1024; ++i) {
-    page_dir[i].address = 0x0;
-    page_dir[i].free = 0x0;
-    page_dir[i].global = 0x0;
-    page_dir[i].page_size = 0x0;
-    page_dir[i].ignored = 0x0;
-    page_dir[i].accessed = 0x0;
-    page_dir[i].cache_dis = 0x0;
-    page_dir[i].write_thru = 0x0;
-    page_dir[i].user_sup = 0x0;
-    page_dir[i].read_write = 0x1;
-    page_dir[i].present = 0x0;
-    /* Corto: page_dir[i] = 0x00000002; // Address a 0, r/w
-     */
+  for (i = 0; i < 1024; i++) {
+    page_directory[i].address = 0x0;
+    page_directory[i].free = 0x0;
+    page_directory[i].global = 0x0;
+    page_directory[i].page_size = 0x0;
+    page_directory[i].ignored = 0x0;
+    page_directory[i].accessed = 0x0;
+    page_directory[i].cache_dis = 0x0;
+    page_directory[i].write_thru = 0x0;
+    page_directory[i].user_sup = 0x0;
+    page_directory[i].read_write = 0x1;
+    page_directory[i].present = 0x0;
   }
-  uint cr3 = (uint) page_dir;
-  page_dir[0].address = PAGE_TABLE >> 12; //first page
-  page_dir[0].present = 0x1;
-  for (i = 0; i < 1024; ++i) {
-    mmu_mapear_pagina(0x1000*i, cr3, 0x1000*i, 0x3);
+  pte* first_page_table = (pte*) PAGE_TABLE;
+  page_directory[0].address = (uint)first_page_table >> 12;
+  for (i = 0; i < 1024; i++) {
+    mmu_mapear_pagina(i * 0x1000, (uint) page_directory, i * 0x1000, 3);
   }
+  page_directory[0].address = (uint)first_page_table >> 12;
+  page_directory[0].read_write = 1;
+  page_directory[0].present = 1; 
+  
   return 1;
 }
       

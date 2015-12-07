@@ -20,31 +20,31 @@ uint page_directory[1024];
 uint page_table[1024];
 
 typedef struct pte_t {
-  unsigned int  address:20;
-  unsigned char free:3;
-  unsigned char global:1;
-  unsigned char page_attr:1;
-  unsigned char dirty:1;
-  unsigned char accessed:1;
-  unsigned char cache_dis:1;
-  unsigned char write_thru:1;
-  unsigned char user_sup:1;
-  unsigned char read_write:1;
   unsigned char present:1;
+  unsigned char read_write:1;
+  unsigned char user_sup:1;
+  unsigned char write_thru:1;
+  unsigned char cache_dis:1;
+  unsigned char accessed:1;
+  unsigned char dirty:1;
+  unsigned char page_attr:1;
+  unsigned char global:1;
+  unsigned char free:3;
+  unsigned int  address:20;
 } __attribute__((__packed__)) pte;
 
 typedef struct pde_t {
-  unsigned int  address:20;
-  unsigned char free:3;
-  unsigned char global:1;
-  unsigned char page_size:1;
-  unsigned char ignored:1;
-  unsigned char accessed:1;
-  unsigned char cache_dis:1;
-  unsigned char write_thru:1;
-  unsigned char user_sup:1;
-  unsigned char read_write:1;
   unsigned char present:1;
+  unsigned char read_write:1;
+  unsigned char user_sup:1;
+  unsigned char write_thru:1;
+  unsigned char cache_dis:1;
+  unsigned char accessed:1;
+  unsigned char ignored:1;
+  unsigned char page_size:1;
+  unsigned char global:1;
+  unsigned char free:3;
+  unsigned int  address:20;
 } __attribute__((__packed__)) pde;
 
   

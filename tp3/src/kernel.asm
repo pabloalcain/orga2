@@ -107,23 +107,18 @@ BITS 32
   ; Inicializar el manejador de memoria
 
 
-  
   ; Inicializar el directorio de paginas
-  xchg bx, bx
   call mmu_inicializar_dir_kernel
-  xchg bx, bx
-  
-
-
 
   ; Cargar directorio de paginas
   mov eax, PAGE_DIR
   mov cr3, eax
+
   ; Habilitar paginacion
   mov eax, cr0
   or eax, 0x80000000
   mov cr0, eax
-  
+
   ; Inicializar tss
 
   ; Inicializar tss de la tarea Idle
