@@ -54,6 +54,24 @@ uint mmu_inicializar_dir_kernel() {
   return 1;
 }
       
+void mmu_unmapear_pagina(unsigned int virtual, unsigned int cr3){
+  pde *page_dir = (pde *) cr3;
+  pte *page_table;
+  int pdidx = (virtual >> 22) & 0x03FF; /* last 10 binary digits */
+  int ptidx = (virtual >> 12) & 0x03FF;
+	pde pdentry = page_dir[pdidx];     /* Ir a la entrada dentro del page directory*/
+  pte ptentry;
+	if (! pdentry.present) {
+		return;
+	}
+	page_table = (pte *) (pdentry.address << 12);
+	ptentry = page_table[ptidx];
+	if (ptentry.present) {
+		/* Si la entrada buscada está en el page directory */
+		ptentry.present = 0;
+		tlbflush();	
+	}
+}
   
   
 
