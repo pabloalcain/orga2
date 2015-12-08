@@ -12,6 +12,8 @@ extern screen_inicializar
 extern idt_inicializar
 
 extern mmu_inicializar_dir_kernel
+extern mmu_inicializar
+extern mmu_inicializar_memoria_perro
 global start
 
 
@@ -106,7 +108,7 @@ BITS 32
 
   ; Inicializar el manejador de memoria
 
-
+  call mmu_inicializar
   ; Inicializar el directorio de paginas
   call mmu_inicializar_dir_kernel
 
@@ -122,7 +124,6 @@ BITS 32
   ; Inicializar tss
 
   ; Inicializar tss de la tarea Idle
-
   ; Inicializar el scheduler
 
   ; Configurar controlador de interrupciones
